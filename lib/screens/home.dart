@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  final maskFormatter = MaskTextInputFormatter(
+      mask: '(###) ###-####',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
+
+  Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +30,29 @@ class Home extends StatelessWidget {
                     onPressed: () {},
                     child: Text('fgfd'),
                   ),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
                   Expanded(
-                    child: TextField(),
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        fillColor: const Color.fromRGBO(244, 245, 255, 0.4),
+                        filled: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 12.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        hintText: 'Your phone number',
+                        hintStyle: const TextStyle(
+                          color: Color(0xff7886B8),
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      inputFormatters: [maskFormatter],
+                    ),
                   ),
                 ],
               ),
