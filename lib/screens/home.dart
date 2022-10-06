@@ -45,11 +45,8 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Get Started',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                  )),
+              Text('Get Started',
+                style: Theme.of(context).textTheme.headline1,),
               Row(
                 children: [
                   ElevatedButton(
@@ -74,20 +71,8 @@ class _HomeState extends State<Home> {
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: checkPhoneLength,
-                      decoration: InputDecoration(
-                        fillColor: const Color.fromRGBO(244, 245, 255, 0.4),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 14.0, horizontal: 12.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
+                      decoration: const InputDecoration(
                         hintText: 'Your phone number',
-                        hintStyle: const TextStyle(
-                          color: Color(0xff7886B8),
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w500,
-                        ),
                       ),
                       inputFormatters: [maskFormatter],
                     ),
