@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:phone/consts/app_colors.dart';
+
+import '../consts/app_colors.dart';
+import '../models/country.dart';
+import '../services/country_service.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -19,6 +22,14 @@ class _HomeState extends State<Home> {
       type: MaskAutoCompletionType.lazy);
 
   bool isNextButtonActive = false;
+
+  late Future<List<Country>> futureCountries;
+
+  @override
+  void initState() {
+    super.initState();
+    futureCountries = fetchCountries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +63,7 @@ class _HomeState extends State<Home> {
                       decoration: InputDecoration(
                         fillColor: const Color.fromRGBO(244, 245, 255, 0.4),
                         filled: true,
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                             vertical: 14.0, horizontal: 12.0),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16.0),
@@ -74,7 +85,9 @@ class _HomeState extends State<Home> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      isNextButtonActive ? AppColors.white : AppColors.lightBlue,
+                      isNextButtonActive
+                          ? AppColors.white
+                          : AppColors.lightBlue,
                     ),
                   ),
                   onPressed: isNextButtonActive ? () {} : null,
