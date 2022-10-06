@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:phone/widgets/bottom_sheet.dart';
 
@@ -32,6 +33,13 @@ class _HomeState extends State<Home> {
     futureCountries = fetchCountries();
   }
 
+  DisplayedCountry currentCountry = DisplayedCountry(name: 'Ukraine', callingCode: '+38', flag: 'https://flagcdn.com/ua.svg');
+  void changeCurrentCountry(country) {
+    setState(() {
+      currentCountry = country;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +67,20 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           isScrollControlled: true,
-                          builder: (context) => MyBottomSheet(futureCountries: futureCountries,)
+                          builder: (context) => MyBottomSheet(futureCountries: futureCountries, changeCurrentCountry: changeCurrentCountry,)
                       );
                     },
-                    child: Text('fgfd'),
+                    child: Row(
+                      children: [
+                        SvgPicture.network(
+                          currentCountry.flag,
+                          height: 20.0,
+                          placeholderBuilder: (BuildContext context) => const SizedBox(height: 20.0, width: 38.0,),
+                        ),
+                        const SizedBox(width: 4,),
+                        Text(currentCountry.callingCode),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     width: 8.0,

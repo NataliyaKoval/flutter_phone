@@ -5,8 +5,9 @@ import '../models/country.dart';
 
 class MyBottomSheet extends StatefulWidget {
   final futureCountries;
+  final Function changeCurrentCountry;
 
-  const MyBottomSheet({Key? key, required this.futureCountries})
+  MyBottomSheet({Key? key, required this.futureCountries, required this.changeCurrentCountry})
       : super(key: key);
 
   @override
@@ -70,7 +71,12 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                     return ListView.builder(
                       itemCount: countries.length,
                       itemBuilder: (context, index) {
-                        return CountryListItem(country: countries[index]);
+                        return GestureDetector(
+                          onTap: () {
+                            widget.changeCurrentCountry(countries[index]);
+                            Navigator.of(context).pop();
+                            },
+                          child: CountryListItem(country: countries[index]),);
                       },
                     );
                   } else if (snapshot.hasError) {
