@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:phone/widgets/bottom_sheet.dart';
 
 import '../consts/app_colors.dart';
 import '../models/country.dart';
@@ -34,7 +35,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -50,7 +53,18 @@ class _HomeState extends State<Home> {
               Row(
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20.0),
+                            ),
+                          ),
+                          isScrollControlled: true,
+                          builder: (context) => MyBottomSheet(futureCountries: futureCountries,)
+                      );
+                    },
                     child: Text('fgfd'),
                   ),
                   const SizedBox(

@@ -7,7 +7,7 @@ class Country {
 
   static Country? fromJson(Map<String, dynamic> json) {
     final idd = json['idd'] as Map<String, dynamic>;
-    if(idd.isNotEmpty) {
+    if (idd.isNotEmpty) {
       return Country(
           name: json['name']['official'],
           callingCodes: Idd.fromJson(idd),
@@ -25,9 +25,15 @@ class Idd {
   Idd({required this.root, required this.suffixes});
 
   static fromJson(Map<String, dynamic> json) {
-    return Idd(
-        root: json['root'],
-        suffixes: List.from(json['suffixes'])
-    );
+    return Idd(root: json['root'], suffixes: List.from(json['suffixes']));
   }
+}
+
+class DisplayedCountry {
+  final String name;
+  final String callingCode;
+  final String flag;
+
+  DisplayedCountry(
+      {required this.name, required this.callingCode, required this.flag});
 }
