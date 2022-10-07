@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phone/widgets/country_list_item.dart';
 
+import '../consts/app_colors.dart';
 import '../models/country.dart';
 import '../services/country_service.dart';
 
@@ -75,7 +76,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             alignment: Alignment.topRight,
             child: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
             ),
           ),
           Text(
@@ -87,9 +88,10 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
           ),
           TextField(
             onChanged: filterCountries,
+            style: Theme.of(context).textTheme.button,
             decoration: const InputDecoration(
               hintText: 'Search',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, color: AppColors.buttonTextColor,),
             ),
           ),
           const SizedBox(

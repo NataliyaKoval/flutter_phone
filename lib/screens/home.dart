@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(top: 40.0, bottom: 20.0, left: 20.0, right: 20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,6 +51,9 @@ class _HomeState extends State<Home> {
               Row(
                 children: [
                   ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(AppColors.lightBlue),
+                    ),
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
@@ -74,7 +77,7 @@ class _HomeState extends State<Home> {
                         const SizedBox(
                           width: 4,
                         ),
-                        Text(currentCountry.callingCode),
+                        Text(currentCountry.callingCode, style: Theme.of(context).textTheme.button),
                       ],
                     ),
                   ),
@@ -85,8 +88,9 @@ class _HomeState extends State<Home> {
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: checkPhoneLength,
+                      style: Theme.of(context).textTheme.button,
                       decoration: const InputDecoration(
-                        hintText: 'Your phone number',
+                        hintText: '(123)123-1234',
                       ),
                       inputFormatters: [maskFormatter],
                     ),
@@ -103,7 +107,7 @@ class _HomeState extends State<Home> {
                           : AppColors.lightBlue,
                     ),
                   ),
-                  onPressed: isNextButtonActive ? () {} : null,
+                  onPressed: isNextButtonActive ? saySomething : null,
                   child: const Icon(
                     Icons.arrow_forward,
                     size: 20.0,
@@ -128,5 +132,9 @@ class _HomeState extends State<Home> {
         isNextButtonActive = false;
       });
     }
+  }
+
+  void saySomething() {
+    print('I was pressed!');
   }
 }

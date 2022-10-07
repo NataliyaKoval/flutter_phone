@@ -5,6 +5,7 @@ import '../consts/app_colors.dart';
 class AppTheme {
   ThemeData lightTheme = ThemeData(
     backgroundColor: AppColors.blue,
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
@@ -23,7 +24,7 @@ class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: const Color.fromRGBO(244, 245, 255, 0.4),
+      fillColor: AppColors.lightBlue,
       filled: true,
       contentPadding:
           const EdgeInsets.symmetric(vertical: 14.0, horizontal: 12.0),
@@ -31,7 +32,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(16.0),
       ),
       hintStyle: const TextStyle(
-        color: Color(0xff7886B8),
+        color: AppColors.hintColor,
         fontSize: 16.0,
         fontWeight: FontWeight.w500,
       ),
@@ -43,6 +44,11 @@ class AppTheme {
         fontWeight: FontWeight.w700,
         color: AppColors.white,
       ),
+      button: TextStyle(
+        color: AppColors.buttonTextColor,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      )
     ),
   );
 }
