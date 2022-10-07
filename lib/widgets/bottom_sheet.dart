@@ -2,26 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:phone/widgets/country_list_item.dart';
 
 import '../models/country.dart';
+import '../services/country_service.dart';
 
 class MyBottomSheet extends StatefulWidget {
-  final futureCountries;
   final Function changeCurrentCountry;
 
-  MyBottomSheet({Key? key, required this.futureCountries, required this.changeCurrentCountry})
-      : super(key: key);
+  const MyBottomSheet({
+    Key? key,
+    required this.changeCurrentCountry,
+  }) : super(key: key);
 
   @override
   State<MyBottomSheet> createState() => _MyBottomSheetState();
 }
 
 class _MyBottomSheetState extends State<MyBottomSheet> {
-  late List<DisplayedCountry> countries;
+  late Future<List<Country>> futureCountries;
+  List<DisplayedCountry> allCountries = [];
+  List<DisplayedCountry> displayedCountries = [];
+
+  Future mapCountriesToDisplayedCountries() async {
+    var val = (await futureCountries).expand((country) {
+      final suffixes = country.callingCodes.suffixes;
+      List<DisplayedCountry> result = [];
+      for (var suffix in suffixes) {
+        result.add(DisplayedCountry(
+            name: country.name,
+            callingCode: country.callingCodes.root + suffix,
+            flag: country.flag));
+      }
+      return result;
+    }).toList();
+
+    setState(() {
+      allCountries = val;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    futureCountries = fetchCountries();
+    mapCountriesToDisplayedCountries().whenComplete(() => filterCountries(''));
+  }
+
+  void filterCountries(value) {
+    List<DisplayedCountry> result = [];
+    if (value.isEmpty) {
+      result = allCountries;
+    } else {
+      result = allCountries
+          .where((country) =>
+              country.name.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      displayedCountries = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       color: Theme.of(context).backgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,8 +85,9 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
           const SizedBox(
             height: 20.0,
           ),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            onChanged: filterCountries,
+            decoration: const InputDecoration(
               hintText: 'Search',
               prefixIcon: Icon(Icons.search),
             ),
@@ -50,42 +96,19 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             height: 20.0,
           ),
           Expanded(
-            child: FutureBuilder(
-                future: widget.futureCountries,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final List<Country> rawCountries =
-                        snapshot.data as List<Country>;
-                    countries = rawCountries.expand((country) {
-                      final suffixes = country.callingCodes.suffixes;
-                      List<DisplayedCountry> result = [];
-                      for (var suffix in suffixes) {
-                        result.add(DisplayedCountry(
-                            name: country.name,
-                            callingCode: country.callingCodes.root + suffix,
-                            flag: country.flag));
-                      }
-                      return result;
-                    }).toList();
-
-                    return ListView.builder(
-                      itemCount: countries.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            widget.changeCurrentCountry(countries[index]);
-                            Navigator.of(context).pop();
-                            },
-                          child: CountryListItem(country: countries[index]),);
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
-          )
+            child: ListView.builder(
+              itemCount: displayedCountries.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    widget.changeCurrentCountry(displayedCountries[index]);
+                    Navigator.of(context).pop();
+                  },
+                  child: CountryListItem(country: displayedCountries[index]),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

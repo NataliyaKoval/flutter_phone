@@ -5,7 +5,6 @@ import 'package:phone/widgets/bottom_sheet.dart';
 
 import '../consts/app_colors.dart';
 import '../models/country.dart';
-import '../services/country_service.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -25,15 +24,9 @@ class _HomeState extends State<Home> {
 
   bool isNextButtonActive = false;
 
-  late Future<List<Country>> futureCountries;
+  DisplayedCountry currentCountry = DisplayedCountry(
+      name: 'Ukraine', callingCode: '+38', flag: 'https://flagcdn.com/ua.svg');
 
-  @override
-  void initState() {
-    super.initState();
-    futureCountries = fetchCountries();
-  }
-
-  DisplayedCountry currentCountry = DisplayedCountry(name: 'Ukraine', callingCode: '+38', flag: 'https://flagcdn.com/ua.svg');
   void changeCurrentCountry(country) {
     setState(() {
       currentCountry = country;
@@ -43,9 +36,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -53,21 +44,20 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Get Started',
-                style: Theme.of(context).textTheme.headline1,),
+              Text(
+                'Get Started',
+                style: Theme.of(context).textTheme.headline1,
+              ),
               Row(
                 children: [
                   ElevatedButton(
                     onPressed: () {
                       showModalBottomSheet(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20.0),
-                            ),
-                          ),
-                          isScrollControlled: true,
-                          builder: (context) => MyBottomSheet(futureCountries: futureCountries, changeCurrentCountry: changeCurrentCountry,)
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => MyBottomSheet(
+                          changeCurrentCountry: changeCurrentCountry,
+                        ),
                       );
                     },
                     child: Row(
@@ -75,9 +65,15 @@ class _HomeState extends State<Home> {
                         SvgPicture.network(
                           currentCountry.flag,
                           height: 20.0,
-                          placeholderBuilder: (BuildContext context) => const SizedBox(height: 20.0, width: 38.0,),
+                          placeholderBuilder: (BuildContext context) =>
+                              const SizedBox(
+                            height: 20.0,
+                            width: 38.0,
+                          ),
                         ),
-                        const SizedBox(width: 4,),
+                        const SizedBox(
+                          width: 4,
+                        ),
                         Text(currentCountry.callingCode),
                       ],
                     ),
